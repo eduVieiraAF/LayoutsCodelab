@@ -10,13 +10,13 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.layout.*
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.*
 import com.example.layoutscodelab.ui.theme.LayoutsCodelabTheme
 import kotlin.math.max
 
@@ -34,6 +34,7 @@ fun LayoutsCodelab() {
                 title = {
                     Text(text = "LayoutsCodelab")
                 },
+                Modifier.background(MaterialTheme.colors.secondaryVariant),
                 actions = {
                     IconButton(onClick = { /* doSomething() */ }) {
                         Icon(Icons.Filled.Favorite, contentDescription = null)
@@ -46,20 +47,58 @@ fun LayoutsCodelab() {
     }
 }
 
+// How to create a modifier
+@Stable
+fun Modifier.padding(all: Dp) =
+    this.then(
+        PaddingModifier(start = all, top = all, end = all, bottom = all, rtlAware = true)
+    )
+
+// Implementation detail
+private class PaddingModifier(
+    val start: Dp = 0.dp,
+    val top: Dp = 0.dp,
+    val end: Dp = 0.dp,
+    val bottom: Dp = 0.dp,
+    val rtlAware: Boolean,
+) : LayoutModifier {
+
+    override fun MeasureScope.measure(
+        measurable: Measurable,
+        constraints: Constraints
+    ): MeasureResult {
+
+        val horizontal = start.roundToPx() + end.roundToPx()
+        val vertical = top.roundToPx() + bottom.roundToPx()
+
+        val placeable = measurable.measure(constraints.offset(-horizontal, -vertical))
+
+        val width = constraints.constrainWidth(placeable.width + horizontal)
+        val height = constraints.constrainHeight(placeable.height + vertical)
+        return layout(width, height) {
+            if (rtlAware) {
+                placeable.placeRelative(start.roundToPx(), top.roundToPx())
+            } else {
+                placeable.place(start.roundToPx(), top.roundToPx())
+            }
+        }
+    }
+}
+
 @Composable
 fun BodyContent(modifier: Modifier = Modifier) {
     Row(modifier = modifier
         .background(color = Color.LightGray)
         .padding(16.dp)
         .size(200.dp)
-        .horizontalScroll(rememberScrollState()),
-        content = {
-            StaggeredGrid {
-                for (topic in topics) {
-                    Chip(modifier = Modifier.padding(8.dp), text = topic)
-                }
+        .horizontalScroll(rememberScrollState())
+    ) {
+        StaggeredGrid {
+            for (topic in topics) {
+                Chip(modifier = Modifier.padding(8.dp), text = topic)
             }
-        })
+        }
+    }
 }
 
 @Composable
@@ -139,7 +178,7 @@ fun Chip(modifier: Modifier = Modifier, text: String) {
             Box(
                 modifier = Modifier
                     .size(16.dp, 16.dp)
-                    .background(color = MaterialTheme.colors.secondary)
+                    .background(color = MaterialTheme.colors.secondaryVariant)
             )
             Spacer(Modifier.width(4.dp))
             Text(text = text)
