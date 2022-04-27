@@ -1,9 +1,7 @@
 package com.example.layoutscodelab
 
-import android.app.Notification
-import android.content.res.Configuration.UI_MODE_NIGHT_YES
-import android.graphics.Paint
 import android.os.Bundle
+import android.text.Layout
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.*
@@ -24,8 +22,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.AlignmentLine
 import androidx.compose.ui.layout.FirstBaseline
 import androidx.compose.ui.layout.layout
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -168,7 +164,7 @@ fun SimpleListPreview() {
 
 // region → LazColumn as a RecyclerView
 @Composable
-fun LazyList(){
+fun LazyList() {
     // We save the scrolling position with this state that can also
     // be used to programmatically scroll the list
     val scrollState = rememberLazyListState()
@@ -176,8 +172,8 @@ fun LazyList(){
     LazyColumn(
         state = scrollState,
         modifier = Modifier.padding(8.dp)
-    ){
-        items(100){
+    ) {
+        items(100) {
             Text(
                 "Item → $it",
                 color = MaterialTheme.colors.secondaryVariant
@@ -261,6 +257,7 @@ fun ImageListItemPreview() {
 */
 //endRegion
 
+// region → Layout Modifier
 fun Modifier.firstBaselineTop(
     firstBaselineTop: Dp
 ) = this.then(
@@ -281,6 +278,7 @@ fun Modifier.firstBaselineTop(
     }
 )
 
+/*
 @Preview(showBackground = true)
 @Composable
 fun TextWithPaddingToBaselinePreview(){
@@ -296,3 +294,19 @@ fun TextWithNormalPaddingPreview() {
         Text("Hello, World!", Modifier.padding(top = 32.dp))
     }
 }
+*/
+// endRegion
+/*
+@Composable
+fun CustomLayout(
+    modifier: Modifier = Modifier,
+    // custom layout attributes
+    content: @Composable () -> Unit
+) {
+    Layout(
+        modifier = modifier,
+        content = content
+    ) { measurables, constraints ->
+        // measure and position children given constraints logic here
+    }
+}*/
