@@ -37,14 +37,17 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+// region → UNDERSTANDING MODIFIERS
+
 @Composable
 fun PhotographerCard(modifier: Modifier = Modifier) {
-    Row(modifier
-        .padding(8.dp)
-        .clip(RoundedCornerShape(8.dp))
-        .background(MaterialTheme.colors.secondaryVariant)
-        .clickable(onClick = { /* ignoring onClick*/ })
-        .padding(16.dp)
+    Row(
+        modifier
+            .padding(8.dp)
+            .clip(RoundedCornerShape(8.dp))
+            .background(MaterialTheme.colors.secondaryVariant)
+            .clickable(onClick = { /* ignoring onClick*/ })
+            .padding(16.dp)
     ) {
         Surface(
             modifier.size(50.dp),
@@ -66,6 +69,7 @@ fun PhotographerCard(modifier: Modifier = Modifier) {
     }
 }
 
+/*
 @Preview(showBackground = true)
 @Composable
 fun PhotographerCardPreview() {
@@ -80,5 +84,31 @@ fun PhotographerCardPreview() {
 fun PhotographerCardPreviewDark() {
     LayoutsCodelabTheme {
         PhotographerCard()
+    }
+}
+ */
+
+// endRegion
+
+@Composable
+fun LayoutsCodelab(){
+    Scaffold { innerPadding ->
+        BodyContent(Modifier.padding(innerPadding))
+    }
+}
+
+@Composable
+fun BodyContent(modifier: Modifier = Modifier) {
+    Column(modifier = modifier) {
+        Text(text = "Hello, World!")
+        Text(text = "Going through Layouts codelab.")
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun LayoutsCodelabPreview() {
+    LayoutsCodelabTheme {
+        LayoutsCodelab()
     }
 }
